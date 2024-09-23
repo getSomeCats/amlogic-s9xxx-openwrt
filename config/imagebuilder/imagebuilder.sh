@@ -141,31 +141,10 @@ custom_packages() {
     # Download other luci-app-xxx
     # ......
     # 定义 GitHub API URL 和软件包名称
-    passwall_api="https://api.github.com/repos/xiaorouji/openwrt-passwall2/releases"
     adguard_api="https://api.github.com/repos/rufengsuixing/luci-app-adguardhome/releases"
     
     # 定义下载文件名称
-    passwall_file="luci-app-passwall2"
     adguard_file="luci-app-adguardhome"
-    
-    # 下载 passwall2 的 IPK 文件
-    passwall_file_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_file}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${passwall_file_down}
-    if [[ "${?}" -ne "0" ]]; then
-        echo "[ ${passwall_file} ] download failed!"
-    else
-        echo "The [ ${passwall_file} ] is downloaded successfully."
-    fi
-    
-    # 下载 passwall2 的国际化文件
-    passwall_i18n="luci-i18n-passwall2"
-    passwall_i18n_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_i18n}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${passwall_i18n_down}
-    if [[ "${?}" -ne "0" ]]; then
-        echo "[ ${passwall_i18n} ] download failed!"
-    else
-        echo "The [ ${passwall_i18n} ] is downloaded successfully."
-    fi
     
     # 下载 AdGuard Home 的 IPK 文件
     adguard_file_down="$(curl -s ${adguard_api} | grep "browser_download_url" | grep -oE "https.*${adguard_file}.*.ipk" | head -n 1)"
@@ -233,7 +212,7 @@ rebuild_firmware() {
     my_packages="\
         acpid attr base-files bash bc blkid block-mount blockd bsdtar btrfs-progs busybox bzip2 \
         cgi-io chattr comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
-        coreutils-truncate curl dosfstools dumpe2fs e2freefrag e2fsprogs \
+        coreutils-truncate curl docker docker-compose dockerd dosfstools dumpe2fs e2freefrag e2fsprogs \
         exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
         jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
         liblucihttp-lua losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
