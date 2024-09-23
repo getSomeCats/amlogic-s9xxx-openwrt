@@ -140,6 +140,51 @@ custom_packages() {
 
     # Download other luci-app-xxx
     # ......
+    # 定义 GitHub API URL 和软件包名称
+    passwall_api="https://api.github.com/repos/xiaorouji/openwrt-passwall2/releases"
+    adguard_api="https://api.github.com/repos/rufengsuixing/luci-app-adguardhome/releases"
+    
+    # 定义下载文件名称
+    passwall_file="luci-app-passwall2"
+    adguard_file="luci-app-adguardhome"
+    
+    # 下载 passwall2 的 IPK 文件
+    passwall_file_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_file}.*.ipk" | head -n 1)"
+    curl -fsSOJL ${passwall_file_down}
+    if [[ "${?}" -ne "0" ]]; then
+        echo "[ ${passwall_file} ] download failed!"
+    else
+        echo "The [ ${passwall_file} ] is downloaded successfully."
+    fi
+    
+    # 下载 passwall2 的国际化文件
+    passwall_i18n="luci-i18n-passwall2"
+    passwall_i18n_down="$(curl -s ${passwall_api} | grep "browser_download_url" | grep -oE "https.*${passwall_i18n}.*.ipk" | head -n 1)"
+    curl -fsSOJL ${passwall_i18n_down}
+    if [[ "${?}" -ne "0" ]]; then
+        echo "[ ${passwall_i18n} ] download failed!"
+    else
+        echo "The [ ${passwall_i18n} ] is downloaded successfully."
+    fi
+    
+    # 下载 AdGuard Home 的 IPK 文件
+    adguard_file_down="$(curl -s ${adguard_api} | grep "browser_download_url" | grep -oE "https.*${adguard_file}.*.ipk" | head -n 1)"
+    curl -fsSOJL ${adguard_file_down}
+    if [[ "${?}" -ne "0" ]]; then
+        echo "[ ${adguard_file} ] download failed!"
+    else
+        echo "The [ ${adguard_file} ] is downloaded successfully."
+    fi
+    
+    # 下载 AdGuard Home 的国际化文件
+    adguard_i18n="luci-i18n-adguardhome"
+    adguard_i18n_down="$(curl -s ${adguard_api} | grep "browser_download_url" | grep -oE "https.*${adguard_i18n}.*.ipk" | head -n 1)"
+    curl -fsSOJL ${adguard_i18n_down}
+    if [[ "${?}" -ne "0" ]]; then
+        echo "[ ${adguard_i18n} ] download failed!"
+    else
+        echo "The [ ${adguard_i18n} ] is downloaded successfully."
+    fi
 
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory status: $(ls -al 2>/dev/null)"
