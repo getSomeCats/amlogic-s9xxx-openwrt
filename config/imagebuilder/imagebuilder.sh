@@ -154,16 +154,6 @@ custom_packages() {
     else
         echo "The [ ${adguard_file} ] is downloaded successfully."
     fi
-    
-    # 下载 AdGuard Home 的国际化文件
-    adguard_i18n="luci-i18n-adguardhome"
-    adguard_i18n_down="$(curl -s ${adguard_api} | grep "browser_download_url" | grep -oE "https.*${adguard_i18n}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${adguard_i18n_down}
-    if [[ "${?}" -ne "0" ]]; then
-        echo "[ ${adguard_i18n} ] download failed!"
-    else
-        echo "The [ ${adguard_i18n} ] is downloaded successfully."
-    fi
 
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory status: $(ls -al 2>/dev/null)"
