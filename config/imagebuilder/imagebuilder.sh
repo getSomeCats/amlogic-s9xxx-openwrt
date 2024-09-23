@@ -184,10 +184,11 @@ rebuild_firmware() {
     echo -e "${STEPS} Start building OpenWrt with Image Builder..."
 
     # Selecting default packages, lib, theme, app and i18n, etc.
+    # remove docker docker-compose dockerd
     my_packages="\
         acpid attr base-files bash bc blkid block-mount blockd bsdtar btrfs-progs busybox bzip2 \
         cgi-io chattr comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
-        coreutils-truncate curl docker docker-compose dockerd dosfstools dumpe2fs e2freefrag e2fsprogs \
+        coreutils-truncate curl dosfstools dumpe2fs e2freefrag e2fsprogs \
         exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
         jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
         liblucihttp-lua losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
@@ -214,6 +215,19 @@ rebuild_firmware() {
     echo -e "${SUCCESS} The rebuild is successful, the current path: [ ${PWD} ]"
 }
 
+custom_setting() {
+    sed -i 's/192.168.1.1/192.168.0.240/g' package/base-files/files/bin/config_generate
+    # 清空现有的 NAT 表（可选）
+    nft flush table ip nat || nft add table ip nat
+    # 添加 postrouting 链，并设置规则
+    nft add chain ip nat postrouting { type nat hook postrouting priority 100\; }
+    # 设置 masquerade 规则
+    nft add rule ip nat postrouting oifname "eth0" masquerade
+    nft list ruleset > /etc/nftables.conf
+    nft_command="nft -f /etc/nftables.conf"
+    sed -i "/exit 0/i $nft_command" /etc/rc.local
+
+}
 # Show welcome message
 echo -e "${STEPS} Welcome to Rebuild OpenWrt Using the Image Builder."
 [[ -x "${0}" ]] || error_msg "Please give the script permission to run: [ chmod +x ${0} ]"
