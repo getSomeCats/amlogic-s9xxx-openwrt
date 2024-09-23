@@ -260,7 +260,7 @@ custom_packages
 custom_config
 custom_files
 rebuild_firmware
-custom_setting
+
 #
 # Show server end information
 echo -e "Server space usage after compilation: \n$(df -hT ${make_path}) \n"
