@@ -229,19 +229,6 @@ rebuild_firmware() {
     echo -e "${SUCCESS} The rebuild is successful, the current path: [ ${PWD} ]"
 }
 
-custom_setting() {
-    sed -i 's/192.168.1.1/192.168.0.240/g' package/base-files/files/bin/config_generate
-    # 清空现有的 NAT 表（可选）
-    nft flush table ip nat || nft add table ip nat
-    # 添加 postrouting 链，并设置规则
-    nft add chain ip nat postrouting { type nat hook postrouting priority 100\; }
-    # 设置 masquerade 规则
-    nft add rule ip nat postrouting oifname "eth0" masquerade
-    nft list ruleset > /etc/nftables.conf
-    nft_command="nft -f /etc/nftables.conf"
-    sed -i "/exit 0/i $nft_command" /etc/rc.local
-
-}
 # Show welcome message
 echo -e "${STEPS} Welcome to Rebuild OpenWrt Using the Image Builder."
 [[ -x "${0}" ]] || error_msg "Please give the script permission to run: [ chmod +x ${0} ]"
