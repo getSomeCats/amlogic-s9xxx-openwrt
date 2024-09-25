@@ -1,0 +1,6 @@
+# 修改默认ip
+uci set network.lan.ipaddr='192.168.0.240'
+uci commit network
+/etc/init.d/network restart
+
+exit 0
