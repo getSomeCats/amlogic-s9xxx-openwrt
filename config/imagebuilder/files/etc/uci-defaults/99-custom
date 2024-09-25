@@ -1,4 +1,11 @@
+uci set network.lan=interface
+uci set network.lan.device='eth0'
+uci set network.lan.proto='static'
 uci set network.lan.ipaddr='192.168.0.240'
+uci set network.lan.netmask='255.255.255.0'
+uci set network.lan.dns='192.168.0.1'
+uci set network.lan.delegate='0'
+uci set network.lan.gateway='192.168.0.1'
 uci commit network
 /etc/init.d/network restart
 
