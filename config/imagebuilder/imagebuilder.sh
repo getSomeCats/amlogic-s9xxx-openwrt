@@ -129,20 +129,6 @@ custom_packages() {
 
     # Download other luci-app-xxx
     # ......
-    # Download luci-app-mosdns
-    mosdns_api="https://api.github.com/repos/sbwml/luci-app-mosdns/releases"
-    #
-    mosdns_file="luci-app-mosdns"
-    mosdns_file_down="$(curl -s ${mosdns_api} | grep "browser_download_url" | grep -oE "https.*${mosdns_name}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${mosdns_file_down}
-    [[ "${?}" -eq "0" ]] || error_msg "[ ${mosdns_file} ] download failed!"
-    echo -e "${INFO} The [ ${mosdns_file} ] is downloaded successfully."
-    #
-    mosdns_i18n="luci-i18n-mosdns"
-    mosdns_i18n_down="$(curl -s ${mosdns_api} | grep "browser_download_url" | grep -oE "https.*${mosdns_i18n}.*.ipk" | head -n 1)"
-    curl -fsSOJL ${mosdns_i18n_down}
-    [[ "${?}" -eq "0" ]] || error_msg "[ ${mosdns_i18n} ] download failed!"
-    echo -e "${INFO} The [ ${mosdns_i18n} ] is downloaded successfully."
 
     sync && sleep 3
     echo -e "${INFO} [ packages ] directory status: $(ls -al 2>/dev/null)"
@@ -205,7 +191,6 @@ rebuild_firmware() {
         luci-proto-ncm luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
         \
         luci-app-amlogic luci-i18n-amlogic-zh-cn \
-        luci-app-mosdns luci-i18n-mosdns-zh-cn \
         \
         ${config_list} \
         "
